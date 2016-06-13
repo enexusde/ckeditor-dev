@@ -55,12 +55,13 @@
 				onUploaded: function( upload ) {
 					var width = this.parts.img.$.naturalWidth;
 					var height = this.parts.img.$.naturalHeight;
+					var data = JSON.parse(upload.xhr.response);
 					// Server may resize image after upload, lets get defined size from response. Allow null here.
-					if (typeof upload.width !== 'undefined') {
-						width = upload.width;
+					if (typeof data.width !== 'undefined') {
+						width = data.width;
 					}
-					if (typeof upload.height !== 'undefined') {
-						height = upload.height;
+					if (typeof data.height !== 'undefined') {
+						height = data.height;
 					}
 					var imgHtml = '<img src="' + upload.url + '" ';
 					if (width !== null) {
@@ -72,8 +73,8 @@
 					imgHtml +='>';
 					
 					// Server may have highres version, link using a-href.
-					if(typeof upload.link !== 'undefined') {
-						imgHtml = '<a href="'+upload.link+'">' + imgHtml + '</a>';
+					if(typeof data.link !== 'undefined') {
+						imgHtml = '<a href="'+data.link+'">' + imgHtml + '</a>';
 					}
 					// Set width and height to prevent blinking.
 					this.replaceWith(imgHtml);
