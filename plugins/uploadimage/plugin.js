@@ -53,10 +53,30 @@
 				},
 
 				onUploaded: function( upload ) {
+					var width = this.parts.img.$.naturalWidth;
+					var height = this.parts.img.$.naturalHeight;
+					// Server may resize image after upload, lets get defined size from response. Allow null here.
+					if (typeof upload.width !== 'undefined') {
+						width = upload.width;
+					}
+					if (typeof upload.height !== 'undefined') {
+						height = upload.height;
+					}
+					var imgHtml = '<img src="' + upload.url + '" ';
+					if (width !== null) {
+						imgHtml += 'width="' + width + '" ';
+					}
+					if (height !== null) {
+						imgHtml += 'height="' + height + '" ';
+					}
+					imgHtml +='>';
+					
+					// Server may have highres version, link using a-href.
+					if(typeof upload.link !== 'undefined') {
+						imgHtml = '<a href="'+upload.link+'">' + imgHtml + '</a>';
+					}
 					// Set width and height to prevent blinking.
-					this.replaceWith( '<img src="' + upload.url + '" ' +
-						'width="' + this.parts.img.$.naturalWidth + '" ' +
-						'height="' + this.parts.img.$.naturalHeight + '">' );
+					this.replaceWith(imgHtml);
 				}
 			} );
 
